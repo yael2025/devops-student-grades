@@ -2,7 +2,7 @@ pipeline {
   agent none
 
   parameters {
-    choice(name: 'RUN_ON', choices: ['master', 'agent'], description: 'Where to run the script')
+    choice(name: 'RUN_ON', choices: ['agent', 'master'], description: 'Where to run the script')
     string(name: 'STUDENT_NAME', defaultValue: 'Yael', description: 'Student name')
     string(name: 'STUDENT_ID', defaultValue: '12345', description: '5-12 digits')
     string(name: 'SCORES', defaultValue: '90,78,100,65', description: 'Comma-separated scores (0-100)')
@@ -34,8 +34,16 @@ pipeline {
       }
 
       steps {
-        sh 'node -v && npm -v'
-        sh 'node app.js'
+        script {
+          if (isUnix()) {
+            sh 'node -v && npm -v'
+            sh 'node app.js'
+          } else {
+            bat 'node -v'
+            bat 'npm -v'
+            bat 'node app.js'
+          }
+        }
       }
 
       post {
