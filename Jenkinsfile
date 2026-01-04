@@ -16,6 +16,10 @@ pipeline {
     stage('Checkout + Run') {
       agent { label "${params.RUN_ON == 'agent' ? 'agent' : 'built-in'}" }
 
+      tools {
+             git 'git-linux'
+        }
+
       environment {
         STUDENT_NAME = "${params.STUDENT_NAME}"
         STUDENT_ID = "${params.STUDENT_ID}"
