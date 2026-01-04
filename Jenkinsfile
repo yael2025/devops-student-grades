@@ -13,14 +13,7 @@ pipeline {
   }
 
   stages {
-    stage('Checkout') {
-      agent any
-      steps {
-        checkout scm
-      }
-    }
-
-    stage('Run on selected node') {
+    stage('Checkout + Run') {
       agent { label "${params.RUN_ON == 'agent' ? 'agent' : 'built-in'}" }
 
       environment {
@@ -34,11 +27,15 @@ pipeline {
       }
 
       steps {
+        checkout scm
+
         script {
           if (isUnix()) {
+            sh 'git --version'
             sh 'node -v && npm -v'
             sh 'node app.js'
           } else {
+            bat 'git --version'
             bat 'node -v'
             bat 'npm -v'
             bat 'node app.js'
