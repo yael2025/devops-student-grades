@@ -171,7 +171,7 @@ const html = `<!doctype html>
   </div>
 
   <script>
-    const scores = ${scoresJson};
+    const scores = ${JSON.stringify(scoresArr)};
     const labels = scores.map((_, i) => "Test " + (i+1));
     const ctx = document.getElementById("scoresChart").getContext("2d");
     new Chart(ctx, {
