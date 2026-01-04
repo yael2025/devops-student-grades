@@ -198,3 +198,25 @@ logLine(logPath,`Wrote HTML report: ${reportPath}` )
 
 logLine(logPath, "Script finished successfully")
 console.log(`OK: report generated at ${reportPath}`);
+
+
+const summary = {
+    students: scores.length,
+    average:
+      scores.reduce((sum, s) => sum + s.grade, 0) / scores.length,
+    min: Math.min(...scores.map(s => s.grade)),
+    max: Math.max(...scores.map(s => s.grade))
+  };
+  
+  const outputDir = path.join(__dirname, "output");
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
+  
+  fs.writeFileSync(
+    path.join(outputDir, "summary.json"),
+    JSON.stringify(summary, null, 2)
+  );
+  
+  console.log("Summary:");
+  console.log(summary);
