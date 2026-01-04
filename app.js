@@ -42,7 +42,7 @@ function stats(arr) {
 }
 
 //red parameters from env (Jenkins-friendly)
-const outDir = path.join(process.cwd(), "outpot")
+const outDir = path.join(process.cwd(), "output")
 ensureDir(outDir)
 
 const logPath = path.join(outDir, "run.log")

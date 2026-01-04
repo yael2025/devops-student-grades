@@ -49,7 +49,8 @@ pipeline {
 
       post {
         always {
-          archiveArtifacts artifacts: 'output/report.html, output/run.log', fingerprint: true
+         archiveArtifacts artifacts: 'output/**', fingerprint: true, allowEmptyArchive: true
+
         }
       }
     }
