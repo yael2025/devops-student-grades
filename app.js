@@ -35,10 +35,10 @@ function stats(arr) {
     const min = Math.min(...arr)
     const max = Math.max(...arr)
     const sum = arr.reduce((a, b) => a + b, 0)
-    const avg = sum / n
-    const variance = arr.reduce((a, x) => a + Math.pow(x - avg, 2), 0) / n
+    const average = n ? (sum / n)  : 0;
+    const variance = arr.reduce((a, x) => a + Math.pow(x - average, 2), 0) / n
     const std = Math.sqrt(variance)
-    return { n, min, max, sum, avg, std }
+    return { n, min, max, sum, average, std }
 }
 
 //red parameters from env (Jenkins-friendly)
@@ -102,7 +102,7 @@ logLine(logPath,"Validation passed")
 
 //comute
 const s = stats(scoresArr)
-let finalScore=(s.avg + (params.hasBonus? params.bonusPoints : 0))
+let finalScore=(s.average + (params.hasBonus? params.bonusPoints : 0))
 if(finalScore>100) finalScore = 100;
 
 const status = finalScore >= params.passThreshold? "PASS" : "FAIL"
@@ -147,7 +147,7 @@ const html = `<!doctype html>
   
   <div class="card">
     <h2>Result</h2>
-    <p><b>Average:</b> ${s.avg.toFixed(2)}</p>
+    <p><b>Average:</b> ${s.average.toFixed(2)}</p>
     <p><b>Bonus Applied:</b> ${params.hasBonus ? "Yes" : "No"} (${params.hasBonus ? params.bonusPoints : 0})</p>
     <p><b>Final Score:</b> ${finalScore.toFixed(2)}</p>
     <p><b>Threshold:</b> ${params.passThreshold}</p>
@@ -201,22 +201,28 @@ console.log(`OK: report generated at ${reportPath}`);
 
 
 const summary = {
-    students: scores.length,
-    average:
-      scores.reduce((sum, s) => sum + s.grade, 0) / scores.length,
-    min: Math.min(...scores.map(s => s.grade)),
-    max: Math.max(...scores.map(s => s.grade))
+    students: 1,
+    scoresCount : scoresArr.length,
+    average: s.average,
+    min: Math.min(...scoresArr.map(s => s.grade)),
+    max: Math.max(...scoresArr.map(s => s.grade)),
+    finalScore: Number(finalScore.toFixed(2)),
+    status: status,
+    examDate: params.examDate,
+    passThreshold: params.passThreshold,
+    bonusApplied: params.hasBonus,
+    bonusPoints: params.hasBonus ? params.bonusPoints: 0
   };
   
-  const outputDir = path.join(__dirname, "output");
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir);
-  }
+ 
   
   fs.writeFileSync(
-    path.join(outputDir, "summary.json"),
-    JSON.stringify(summary, null, 2)
+    path.join(outDir, "summary.json"),
+    JSON.stringify(summary, null, 2),
+    "utf-8"
   );
+
+  logLine(logPath, `Wrote summery JSON : ${path.join(outDir, "summery.json")}`)
   
-  console.log("Summary:");
-  console.log(summary);
+  console.log("Summary:" ,summary);
+ 
