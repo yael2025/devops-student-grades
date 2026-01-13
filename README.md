@@ -60,16 +60,19 @@ The Jenkins pipeline consists of the following stages:
 ---
 
 ## Repository Structure
+
+```
+.
 ├── app.js
 ├── Jenkinsfile
 ├── package.json
 ├── README.md
 ├── output/
-│ ├── report.html
-│ ├── summary.json
-│ └── run.log
+│   ├── report.html
+│   ├── summary.json
+│   └── run.log
 └── screenshots/
-
+```
 ---
 
 ## Screenshots
